@@ -12,7 +12,7 @@ import { Contact } from "../components/sections/Contact";
 import { Footer } from "../components/sections/Footer";
 import { useDarkMode } from "../hooks/useDarkMode";
 
-export function Home() {
+export default function Home() {
   const [dark, setDark]     = useDarkMode();
   const [toast, setToast]   = useState(false);
   const [menuOpen, setMenu] = useState(false);
