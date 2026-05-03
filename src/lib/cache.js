@@ -1,7 +1,11 @@
-function cacheSet(key, data) {
+// src/lib/cache.js
+const CACHE_TTL = 10 * 60 * 1000; // 10 min localStorage cache
+
+export function cacheSet(key, data) {
   try { localStorage.setItem(key, JSON.stringify({ data, ts: Date.now() })); } catch (_) {}
 }
-function cacheGet(key) {
+
+export function cacheGet(key) {
   try {
     const raw = localStorage.getItem(key);
     if (!raw) return null;

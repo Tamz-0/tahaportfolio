@@ -1,4 +1,4 @@
-function parseMarkdown(md) {
+export function parseMarkdown(md) {
   if (!md) return "";
   let html = md
     .replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => {
@@ -29,7 +29,7 @@ function parseMarkdown(md) {
   return out.join("\n");
 }
 
-function parseFrontmatter(raw) {
+export function parseFrontmatter(raw) {
   const m = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
   if (!m) return { data: {}, content: raw };
   const data = {};

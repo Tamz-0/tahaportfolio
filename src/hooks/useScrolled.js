@@ -1,4 +1,7 @@
-function useScrolled() {
+// src/hooks/useScrolled.js
+import { useState, useEffect } from "react";
+
+export function useScrolled() {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 10);

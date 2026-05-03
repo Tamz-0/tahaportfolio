@@ -1,0 +1,148 @@
+[
+    {
+  "id": "hls-streaming",
+  "title": "HLS Stream",
+  "tagline": "Production-grade HLS video streaming platform with microservices architecture, adaptive bitrate delivery, and creator analytics.",
+  "status": "Demo Live / WIP",
+  "tech": ["Node.js", "Next.js", "FFmpeg", "PostgreSQL", "Redis", "Docker", "Kubernetes", "AWS S3", "JWT", "Prometheus"],
+  "github": "https://github.com/Tamz-0/HLSVideoStreamingService-",
+  "livePreview": "https://taha-hsl.vercel.app/",
+  "metrics": [
+    { "label": "Microservices", "value": "7+" },
+    { "label": "Video Formats", "value": "4+" },
+    { "label": "User Roles", "value": "4" },
+    { "label": "Deployment", "value": "K8s Ready" }
+  ],
+  "caseStudy": {
+    "problem": "Centralized video platforms impose upload limits, algorithmic suppression, and opaque analytics. Developers and creators need a self-hosted, production-ready alternative with full control over transcoding pipelines, storage, and delivery — without sacrificing streaming performance.",
+    "solution": "A containerized, microservices-based video platform where uploaded videos are automatically transcoded into HLS segments via FFmpeg workers, stored on AWS S3, and streamed with adaptive bitrate delivery. Role-based access spans creators, moderators, and admins through a unified Next.js frontend.",
+    "architecture": [
+      "User Management Service (Node.js + JWT): handles registration, email verification, role assignment, and avatar upload.",
+      "Video Upload Service: receives raw files (MP4, AVI, MOV, WMV), validates format, and enqueues transcoding jobs via Redis queue.",
+      "Transcoding Orchestration Service: dispatches jobs to Docker-based FFmpeg workers; manages concurrency, retries, and progress events.",
+      "Transcoding Workers: isolated containers running FFmpeg — produce multi-resolution HLS playlists (.m3u8) and segment files (.ts), then push to S3.",
+      "Video Streaming Service: serves HLS manifests and segments from S3 with signed URLs; supports adaptive bitrate switching.",
+      "Video Metadata Service: PostgreSQL-backed store for titles, descriptions, thumbnails, view counts, and creator associations.",
+      "Notification Service: real-time event delivery (upload complete, new subscriber) via WebSocket or polling.",
+      "Next.js Frontend: creator dashboard with analytics, admin panel, and an HLS.js-powered video player."
+    ],
+    "decisions": [
+      "Chose HLS over DASH: broader native browser/device support and simpler CDN caching of static .ts segments.",
+      "Redis-backed job queue over direct service calls: decouples upload latency from transcoding duration — uploads return instantly, workers process async.",
+      "Docker workers for FFmpeg: each transcoding job runs in an isolated container, preventing resource contention and allowing independent horizontal scaling.",
+      "AWS S3 for segment storage: eliminates disk I/O bottleneck on streaming nodes; signed URLs enforce access control without a media proxy.",
+      "PostgreSQL over NoSQL: relational schema fits video-user-subscription relationships cleanly; analytics queries benefit from JOIN and aggregation support."
+    ],
+    "challenges": [
+      "Orchestrating job state across Upload → Orchestrator → Worker → Metadata pipeline required a shared event schema in Redis to avoid race conditions on concurrent uploads.",
+      "FFmpeg multi-resolution output (e.g., 1080p, 720p, 480p) dramatically increases S3 write volume — batched multipart uploads and per-resolution worker parallelism were used to contain latency.",
+      "Kubernetes readiness probes needed careful tuning for FFmpeg worker pods, which have high startup cost but long idle periods between jobs."
+    ],
+    "metrics_detail": "7+ independent microservices across upload, transcoding, streaming, metadata, notification, user management, and frontend layers. Kubernetes manifests + Terraform configs included for production deployment. Prometheus metrics exposed per service; Grafana dashboards monitor transcoding queue depth, active streams, and error rates."
+  }
+},
+  {
+    "id": "blockchain",
+    "title": "AgriChain",
+    "tagline": "End-to-end agricultural supply chain on Ethereum with AI-driven insurance risk scoring.",
+    "status": "Local / Research",
+    "tech": ["Solidity", "React", "Truffle", "Web3.js", "TensorFlow.js", "Python"],
+    "github": "https://github.com/Tamz-0",
+    "livePreview": null,
+    "metrics": [
+      { "label": "Smart Contract Functions", "value": "14+" },
+      { "label": "ML Accuracy", "value": "91%" },
+      { "label": "User Roles", "value": "5" },
+      { "label": "IEEE Submission", "value": "Submitted" }
+    ],
+    "caseStudy": {
+      "problem": "Agricultural supply chains in India suffer from opacity — farmers receive 20-30% of final product value due to multi-layer middlemen, and banks cannot verify crop ownership or yield history for loan underwriting.",
+      "solution": "A permissioned DApp on Ethereum where each produce batch is minted as an on-chain asset. Role-based smart contracts enforce ownership transfers across Farmer → Vendor → Consumer.",
+      "architecture": [
+        "Solidity contracts (Truffle) manage asset lifecycle: mint, transfer, verify, insure.",
+        "React frontend with Web3.js connects MetaMask wallet and dispatches contract calls.",
+        "TensorFlow.js model runs client-side for crop health inference.",
+        "Flask microservice handles VGG19-based risk scoring and generates PDF insurance reports.",
+        "Firebase Firestore stores off-chain metadata linked by IPFS content hash."
+      ],
+      "decisions": [
+        "Chose Ethereum + Truffle over Hyperledger: simpler local dev cycle, better React/Web3.js tooling.",
+        "Client-side TF.js for lightweight checks avoids latency for farmers with poor connectivity.",
+        "Role-based access enforced in Solidity modifiers — not just frontend gates."
+      ],
+      "challenges": [
+        "Gas cost optimization for batch minting: consolidated struct packing reduced deployment cost by ~18%.",
+        "Coordinating 5 distinct role dashboards from a single contract state required careful event indexing."
+      ],
+      "metrics_detail": "VGG19 crop disease model: 91% test accuracy on 38-class PlantVillage dataset. Contract functions: 14 public entry points across 3 contracts."
+    }
+  },
+  {
+    "id": "cropmd",
+    "title": "CropMD",
+    "tagline": "Computer vision diagnostic portal for crop and livestock disease — Flask + VGG19 inference pipeline.",
+    "status": "Local",
+    "tech": ["Python", "Flask", "TensorFlow", "VGG19", "Firebase"],
+    "github": "https://github.com/Tamz-0",
+    "livePreview": null,
+    "metrics": [
+      { "label": "Model", "value": "VGG19" },
+      { "label": "Dataset Classes", "value": "38" },
+      { "label": "Accuracy", "value": "91%" },
+      { "label": "Report Generation", "value": "<2s" }
+    ],
+    "caseStudy": {
+      "problem": "Smallholder farmers in India lose 15-25% of crop yield annually to undiagnosed disease. Access to trained agronomists is limited and expensive.",
+      "solution": "A web portal where farmers upload a leaf image. The backend runs it through a fine-tuned VGG19 pipeline, returns disease name, confidence score, and a structured treatment plan as a downloadable PDF.",
+      "architecture": [
+        "Flask REST API receives base64 image, preprocesses to 224x224 for VGG19 input.",
+        "VGG19 fine-tuned on PlantVillage dataset with transfer learning from ImageNet weights.",
+        "Prediction + top-3 confidence scores returned with mapped treatment metadata.",
+        "Firebase Storage for image persistence; Firestore for diagnosis history per session."
+      ],
+      "decisions": [
+        "VGG19 over MobileNet: higher accuracy on fine-grained disease patterns — acceptable for server-side inference.",
+        "Treatment metadata stored as JSON lookup — disease classes are finite and rarely change."
+      ],
+      "challenges": [
+        "Class imbalance in PlantVillage mitigated with class-weighted loss during fine-tuning.",
+        "Image quality from mobile cameras required CLAHE contrast enhancement preprocessing."
+      ],
+      "metrics_detail": "91% top-1 accuracy, 97% top-3 accuracy across 38 disease classes. Inference: 380ms avg. Report generation under 2 seconds."
+    }
+  },
+  {
+    "id": "voicecart",
+    "title": "VoiceCart",
+    "tagline": "Voice-to-product search assistant with live e-commerce link generation.",
+    "status": "Local",
+    "tech": ["React", "Node.js", "OpenAI API", "Web Speech API"],
+    "github": "https://github.com/Tamz-0",
+    "livePreview": null,
+    "metrics": [
+      { "label": "APIs Integrated", "value": "3" },
+      { "label": "Query Parse Time", "value": "<800ms" },
+      { "label": "Platforms", "value": "Amazon, Flipkart, Myntra" },
+      { "label": "Fallback", "value": "Full text input" }
+    ],
+    "caseStudy": {
+      "problem": "Voice commerce interfaces either use rigid keyword matching or dump raw transcriptions into search bars. The result is high error rates and user abandonment.",
+      "solution": "A React app that listens via Web Speech API, sends transcript to OpenAI intent parser extracting product category, attributes, and price constraints, then assembles deep-link search URLs per platform.",
+      "architecture": [
+        "Web Speech API handles real-time transcription with interim results for live feedback.",
+        "Node.js middleware forwards transcript to OpenAI with structured extraction prompt.",
+        "URL builder maps parsed intent to platform-specific query parameters.",
+        "React state machine manages: idle → listening → processing → results → error."
+      ],
+      "decisions": [
+        "OpenAI for intent parsing over regex: generalizes to colloquial queries rule-based systems fail on.",
+        "State machine over ad-hoc booleans: voice UIs have complex async transitions."
+      ],
+      "challenges": [
+        "Web Speech API fires multiple interim events — debouncing required careful timing logic.",
+        "Cross-browser support gaps required feature detection with text-input fallback."
+      ],
+      "metrics_detail": "End-to-end query parse time: median 780ms on broadband. Text fallback covers ~15% of sessions."
+    }
+  }
+]

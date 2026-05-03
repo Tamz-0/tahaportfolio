@@ -1,4 +1,7 @@
-function useFadeIn() {
+// src/hooks/useFadeIn.js
+import { useRef, useEffect } from "react";
+
+export function useFadeIn() {
   const ref = useRef(null);
   useEffect(() => {
     if (!ref.current) return;
