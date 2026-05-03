@@ -51,6 +51,7 @@ export async function loadOtherProjects() {
         github: repo.html_url,
         // homepage field in GitHub repo settings = live link
         livePreview: (repo.homepage && repo.homepage.trim() !== "") ? repo.homepage : null,
+         image: `https://raw.githubusercontent.com/${GITHUB_USER}/${repo.name}/master/screenshots/dashboard.png`,
       };
     });
 
