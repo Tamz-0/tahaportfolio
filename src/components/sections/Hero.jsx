@@ -18,7 +18,7 @@ export function Hero() {
           </p>
           <div className="hero-ctas">
             <a className="btn btn-primary" href="#projects">View Projects</a>
-            <a className="btn btn-ghost" href="/TahaCV.pdf" download="TahaZaman_CV.pdf">
+            <a className="btn btn-ghost" href="/TAHACV.pdf" download="TahaZaman_CV.pdf">
               <IconDownload /> Download CV
             </a>
           </div>
